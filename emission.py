@@ -15,7 +15,7 @@ def emmision(x,y,hashmap,Y):
 
 
 
-def convert_to_hash_table(lines, k, lower=True, replace_number=True):
+def convert_to_hash_table(lines, lower=True, replace_number=True):
     hashmap = {}
     Y = {}
 
@@ -54,5 +54,21 @@ def convert_to_hash_table(lines, k, lower=True, replace_number=True):
     print("Skipped", len(skipped), "lines: ", end="")
     print(skipped, "\n")
     return hashmap,Y
+def add_unk(hashmap, k = 3):
+    for x in hashmap.keys():
+        count_x = sum(hashmap[x].values())
+        if count_x <= k:
+            if "UNK" not in hashmap:
+                hashmap["UNK"] = {}
+            for y_of_x in hashmap[x]:
+                if y_of_x in hashmap["UNk"]:
+                    hashmap["UNK"][y_of_x]+=hashmap[x][y_of_x]
+                else:
+                    hashmap["UNK"][y_of_x] = hashmap[x][y_of_x]
+
+    return hashmap
+
+
+
 
 
