@@ -1,5 +1,10 @@
+import os
 def read_file_to_lines(path):
-    lines = [line.rstrip('\n') for line in open(path)]
+    if "AL" in path:
+        lines = [line.rstrip('\n') for line in open(path, encoding='gb18030', errors='ignore')]
+    else:
+        print("else haha")
+        lines = [line.rstrip('\n') for line in open(path, encoding='utf-8')]#, encoding='gb18030', errors='ignore'
     return lines
 
 
