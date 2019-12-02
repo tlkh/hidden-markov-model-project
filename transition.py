@@ -8,7 +8,10 @@ def get_mle(y_i1, y_i2, transition_data):
         count_yi1_yi2 = 0
     # count( y_i1 )
     count_yi1 = sum(transition_data[y_i1].values())
-    mle = count_yi1_yi2 / count_yi1
+    if count_yi1 == 0:
+        mle = 0
+    else:
+        mle = count_yi1_yi2 / count_yi1
     return mle
 
 def gen_transition_pairs(line):

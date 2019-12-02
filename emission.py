@@ -1,22 +1,25 @@
 import utils
 
 def get_mle(x, y, emission_data):
-    hashmap = emission_data["x_hashmap"]
-    tags = emission_data["y_tags"]
-    # check if word exists in vocab
-    if x in hashmap.keys():
-        x_hash = hashmap[x]
+    if y == "##START##":
+        return 1
     else:
-        x_hash = hashmap["#UNK#"]
-    # count(y)
-    total_emissions = tags[y]
-    # count(y->x)
-    try:
-        x_y_emissions = x_hash[y]
-    except KeyError:
-        x_y_emissions = 0
-    # count(y->x) / count(y)
-    mle = x_y_emissions/total_emissions
+        hashmap = emission_data["x_hashmap"]
+        tags = emission_data["y_tags"]
+        # check if word exists in vocab
+        if x in hashmap.keys():
+            x_hash = hashmap[x]
+        else:
+            x_hash = hashmap["#UNK#"]
+        # count(y)
+        total_emissions = tags[y]
+        # count(y->x)
+        try:
+            x_y_emissions = x_hash[y]
+        except KeyError:
+            x_y_emissions = 0
+        # count(y->x) / count(y)
+        mle = x_y_emissions/total_emissions
     return mle
 
 
