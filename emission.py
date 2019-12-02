@@ -1,8 +1,8 @@
 import utils
 
 def get_mle(x, y, emission_data):
-    if y == "##START##":
-        return 1
+    if y == "##START##" or y == "##END##":
+        return 0
     else:
         hashmap = emission_data["x_hashmap"]
         tags = emission_data["y_tags"]
@@ -10,7 +10,7 @@ def get_mle(x, y, emission_data):
         if x in hashmap.keys():
             x_hash = hashmap[x]
         else:
-            x_hash = hashmap["#UNK#"]
+            x_hash = hashmap["##UNK##"]
         # count(y)
         total_emissions = tags[y]
         # count(y->x)
@@ -27,7 +27,7 @@ def generate_emission_table(lines, lower=False, replace_number=False):
     hashmap = {}
     Y = {}
     skipped = []
-    hashmap["#UNK#"] = {}
+    hashmap["##UNK##"] = {}
     for line in lines:
         try:
             x, y = line.split(" ")

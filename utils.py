@@ -6,7 +6,7 @@ def preprocess_text(text_input, lower=False, replace_number=False):
         text_input = text_input.replace(",", "")
         try:
             float(text_input)
-            text_input = "#NUM#"
+            text_input = "##NUM##"
         except:
             pass
     return text_input
@@ -21,15 +21,15 @@ def read_file_to_lines(path):
 
 def add_unk(hashmap, k=3):
     smoothed_hashmap = {}
-    smoothed_hashmap["#UNK#"] = {}
+    smoothed_hashmap["##UNK##"] = {}
     for x in hashmap.keys():
         count_x = sum(hashmap[x].values())
         if count_x <= k:
             for y_of_x in hashmap[x]:
-                if y_of_x in smoothed_hashmap["#UNK#"]:
-                    smoothed_hashmap["#UNK#"][y_of_x] += hashmap[x][y_of_x]
+                if y_of_x in smoothed_hashmap["##UNK##"]:
+                    smoothed_hashmap["##UNK##"][y_of_x] += hashmap[x][y_of_x]
                 else:
-                    smoothed_hashmap["#UNK#"][y_of_x] = hashmap[x][y_of_x]
+                    smoothed_hashmap["##UNK##"][y_of_x] = hashmap[x][y_of_x]
         else:
             smoothed_hashmap[x] = hashmap[x]
     return smoothed_hashmap
