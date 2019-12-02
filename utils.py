@@ -1,4 +1,16 @@
-import os
+def preprocess_text(text_input, lower=False, replace_number=False):
+    text_input = text_input.strip()
+    if lower:
+        text_input = text_input.lower()
+    if replace_number:
+        text_input = text_input.replace(",", "")
+        try:
+            float(text_input)
+            text_input = "#NUM#"
+        except:
+            pass
+    return text_input
+
 
 def read_file_to_lines(path):
     if "AL" in path:
@@ -23,6 +35,14 @@ def add_unk(hashmap, k=3):
     return smoothed_hashmap
 
 
+def return_vocab(token_list):
+    vocab_list = list(set(token_list))
+    vocab_list.sort()
+    vocab_size = len(vocab_list)
+    return vocab_list
+
+
+"""
 def convert_to_train_set(lines, lower=True, replace_number=True):
     X, Y = [], []
     skipped = []
@@ -48,10 +68,5 @@ def convert_to_train_set(lines, lower=True, replace_number=True):
     print("Skipped", len(skipped), "lines: ", end="")
     print(skipped)
     return X, Y
+"""
 
-
-def return_vocab(token_list):
-    vocab_list = list(set(token_list))
-    vocab_list.sort()
-    vocab_size = len(vocab_list)
-    return vocab_list

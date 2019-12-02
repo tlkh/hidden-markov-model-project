@@ -1,6 +1,4 @@
-import os
-from utils import *
-    
+import utils
 
 def get_mle(x, y, emission_data):
     hashmap = emission_data["x_hashmap"]
@@ -31,15 +29,7 @@ def generate_emission_table(lines, lower=False, replace_number=False):
         try:
             x, y = line.split(" ")
             # x is the word, y is the POS
-            if lower:
-                x = x.lower()
-            if replace_number:
-                x = x.replace(",", "")
-                try:
-                    float(x)
-                    x = "#NUM#"
-                except:
-                    pass
+            x = utils.preprocess_text(x, lower, replace_number)
             if x in hashmap:
                 if y in hashmap[x]:
                     hashmap[x][y] += 1
