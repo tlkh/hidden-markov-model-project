@@ -12,86 +12,99 @@ class Tokenizer(object):
     def fit_on_text(self, corpus):
         self.vocab_list = utils.return_vocab(corpus)
         self.vocab_list.sort()
-        self.vocab_size = len(self.vocab_list)
-    def return_token(self, input_token):
+    def return_token(self, input_word):
         try:
-            return self.vocab_list.index(input_token)
+            return self.vocab_list.index(input_word)
         except:
             return self.vocab_list.index("##UNK##")
-    def return_sequence(self, corpus):
-        return np.asarray([self.return_token(word) for word in corpus])
+    def return_word(self, input_token):
+        return self.vocab_list[input_token]
+    def return_sequence(self, line):
+        return np.asarray([self.return_token(word) for word in line.split(" ")])
+    def return_words(self, line):
+        return np.asarray([self.return_word(token) for token in line])
     
 class HMM(object):
     def __init__(self, transition_weights=None, emission_weights=None):
         self.transition_weights = transition_weights
         self.emission_weights = emission_weights
-        self.y_vocab = None
-        self.eps = 1e-6
+        self.word_tokenizer = Tokenizer()
+        self.pos_tokenizer = Tokenizer()
+        self.eps = 1e-8
+        self.SCALE = 128
+    def fit_word_tokenizer(self, corpus):
+        self.word_tokenizer.fit_on_text(corpus)
+    def fit_pos_tokenizer(self, corpus):
+        self.pos_tokenizer.fit_on_text(corpus)
+    def pos_tokens_to_labels(self, tokens):
+        return self.pos_tokenizer.return_words(tokens)
     def b(self, u, x):
-        try:
-            mle = self.emission_weights[u, x]
-            return mle
-        except Exception as e:
-            print(e, u, x)
+        mle = self.emission_weights[u, x]
+        #print(u, x, mle)
+        return mle
     def a(self, u, v):
-        mle = self.transition_weights[u, v]
+        try:
+            mle = self.transition_weights[u, v]
+        except Exception as e:
+            print(e, u, v)
         return mle
     def build_transition_weights(self, transition_data):
-        y_vocab = list(transition_data.keys())
-        y_vocab.sort()
-        self.y_vocab = y_vocab
-        #print(y_vocab)
+        y_vocab = self.pos_tokenizer.vocab_list
         len_y_vocab = len(y_vocab)
-        transition_weights = np.zeros((len_y_vocab, len_y_vocab))
+        transition_weights = np.zeros((len_y_vocab, len_y_vocab)) + self.eps
         for i_1 in range(len_y_vocab):
             for i_2 in range(len_y_vocab):
                 start_y, next_y = y_vocab[i_1], y_vocab[i_2]
                 transition_weights[i_1, i_2] = transition.get_mle(start_y, next_y, transition_data)
         self.transition_weights = transition_weights
     def build_emission_weights(self, emission_data):
-        x_vocab = list(emission_data["x_hashmap"].keys())
-        x_vocab.sort()
-        y_vocab = list(emission_data["y_tags"]) + ["##START##", "##END##"]
-        y_vocab.sort()
-        self.y_vocab = y_vocab
-        #print(y_vocab)
-        len_x_vocab = len(x_vocab)
+        y_vocab = self.pos_tokenizer.vocab_list
         len_y_vocab = len(y_vocab)
-        emission_weights = np.zeros((len_y_vocab, len_x_vocab))
+        x_vocab = self.word_tokenizer.vocab_list
+        len_x_vocab = len(x_vocab)
+        emission_weights = np.zeros((len_y_vocab, len_x_vocab)) + self.eps
         for i_1 in range(len_y_vocab):
             for i_2 in range(len_x_vocab):
                 tag_y, word_x = y_vocab[i_1], x_vocab[i_2]
                 emission_weights[i_1, i_2] = emission.get_mle(word_x, tag_y, emission_data)
         self.emission_weights = emission_weights
-    @lru_cache(1024)
-    def pi(self, j, v, seq_x):
-        # j-1 -> j
-        # u -> v
-        seq_x = np.frombuffer(seq_x, dtype="int")
-        if j == 0:
-            if v == 1:
-                return 1
-            else:
-                return 0
-        else:
-            x_j = seq_x[j]
-            n = len(seq_x)
-            len_y_vocab = len(self.y_vocab)
-            if j == n:
-                # last state before stop
-                print("A: ", end="")
-                pi_list = [self.pi(j-1, u, seq_x.tobytes()) * self.a(u, v) for u in range(len_y_vocab)]
-            else:
-                print("B: ", end="")
-                pi_list = [self.pi(j-1, u, seq_x.tobytes()) * self.b(u, x_j) * self.a(u, v)for u in range(len_y_vocab)]
-            print(j, v, pi_list)
-            max_pi = max(pi_list)
-            if np.isnan(max_pi):
-                print("Encounter nan:")
-                raise NameError('Rabz')
-            else:
-                print(max_pi)
-                return max_pi
+    def get_start_token(self):
+        return self.pos_tokenizer.vocab_list.index("##START##")
+    def get_stop_token(self):
+        return self.pos_tokenizer.vocab_list.index("##END##")
+    def _viterbi(self, seq_x_words):
+        seq_x = self.word_tokenizer.return_sequence(seq_x_words)
+        y_vocab = self.pos_tokenizer.vocab_list
+        len_y_vocab = len(y_vocab)
+        @lru_cache(maxsize=1024)
+        def pi(j, v):
+            # state changes: j-1 -> j ; u -> v
+            # indices: 0>START ; 1>WORD ... N>WORD ; N+1>END
+            word = seq_x[j-1]
+            if j > 1:
+                pi_list = [pi(j-1, u) * self.b(u, word) * self.a(u, v) for u in range(len_y_vocab)]
+                max_pi = max(pi_list)
+            elif j == 1:
+                max_pi = self.a(self.get_start_token(), v) * self.b(v, word)
+            return self.SCALE * max_pi    
+        def backtrack(j, v):
+            probs = {
+                u : pi(k, u) * self.a(u, v) for u in range(len_y_vocab)
+            }
+            return max(probs, key=lambda key: probs[key])
+        y_seq = []
+        # 1. start at the last word
+        next_label = self.get_stop_token()
+        # 2. loop backwards until j=1
+        for k in range(len(seq_x), 0, -1):   
+            label = backtrack(k, next_label)
+            next_label = label
+            y_seq.append(label)
+        return y_seq[::-1]
+    def viterbi_predict(self, line):
+        pred = self._viterbi(line)
+        return pred
+            
         
 """
 def pi(j, v, seq_x, data):

@@ -1,3 +1,6 @@
+from functools import lru_cache
+
+@lru_cache(32768)
 def preprocess_text(text_input, lower=False, replace_number=False):
     text_input = text_input.strip()
     if lower:
