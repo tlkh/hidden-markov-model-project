@@ -32,7 +32,7 @@ def generate_emission_table(lines, lower=False, replace_number=False):
         try:
             x, y = line.split(" ")
             # x is the word, y is the POS
-            x = utils.preprocess_text(x, lower, replace_number)
+            #x = utils.preprocess_text(x, lower, replace_number)
             if x in hashmap:
                 if y in hashmap[x]:
                     hashmap[x][y] += 1
@@ -48,7 +48,6 @@ def generate_emission_table(lines, lower=False, replace_number=False):
         except Exception as e:
             if line not in skipped:
                 skipped.append(line)
-    print("Skipped", len(skipped), "lines: ", end="")
-    print(skipped, "\n")
+    print("Skipped", len(skipped), "lines: ", skipped)
     return {"x_hashmap": hashmap,
             "y_tags": Y}

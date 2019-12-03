@@ -1,6 +1,5 @@
 from functools import lru_cache
 
-@lru_cache(32768)
 def preprocess_text(text_input, lower=False, replace_number=False):
     text_input = text_input.strip()
     if lower:
@@ -41,7 +40,6 @@ def add_unk(hashmap, k=3):
 def return_vocab(token_list):
     vocab_list = list(set(token_list))
     vocab_list.sort()
-    vocab_size = len(vocab_list)
     return vocab_list
 
 
