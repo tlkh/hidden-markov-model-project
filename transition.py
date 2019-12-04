@@ -1,13 +1,14 @@
 import utils
 
-def get_mle(y_i1, y_i2, transition_data):
+def get_mle(y_i1, y_i2, y_freq, transition_data):
     # count( y_i1 -> y_i2 )
     try:
         count_yi1_yi2 = transition_data[y_i1][y_i2]
     except KeyError:
         count_yi1_yi2 = 0
     # count( y_i1 )
-    count_yi1 = sum(transition_data[y_i1].values())
+    #count_yi1 = sum(transition_data[y_i1].values())
+    count_yi1 = y_freq[y_i1]
     if count_yi1 == 0:
         mle = 0
     else:
@@ -24,6 +25,8 @@ def generate_transition_pairs(lines, lower=False, replace_number=False):
     X, Y = [], []
     current_X, current_Y = [], []
     y_tokens = ["##START##", "##END##"]
+    y_freq = {"##START##": 0,
+              "##END##":0}
     for line in lines:
         try:
             x, y = line.split(" ")
@@ -31,6 +34,10 @@ def generate_transition_pairs(lines, lower=False, replace_number=False):
             # x is word, y is POS
             #current_X.append(x)
             current_Y.append(y)
+            try:
+                y_freq[y] += 1
+            except KeyError:
+                y_freq[y] = 1
         except Exception as e:
             # empty line: new sentence!
             # create transition pairs
@@ -39,9 +46,12 @@ def generate_transition_pairs(lines, lower=False, replace_number=False):
             #X = X + pairs_X
             Y = Y + pairs_Y
             y_tokens = y_tokens + current_Y
+            y_freq["##START##"] += 1
+            y_freq["##END##"] += 1
             current_X, current_Y = [], []
     return {"X_pairs": X,
             "Y_pairs": Y,
+            "y_freq": y_freq,
             "y_vocab": utils.return_vocab(y_tokens)}
 
 

@@ -44,14 +44,14 @@ class HMM(object):
     def a(self, u, v):
         mle = self.transition_weights[u, v]
         return mle
-    def build_transition_weights(self, transition_data):
+    def build_transition_weights(self, y_freq, transition_data):
         y_vocab = self.pos_tokenizer.vocab_list
         len_y_vocab = len(y_vocab)
         transition_weights = np.zeros((len_y_vocab, len_y_vocab))
         for i_1 in range(len_y_vocab):
             for i_2 in range(len_y_vocab):
                 start_y, next_y = y_vocab[i_1], y_vocab[i_2]
-                transition_weights[i_1, i_2] = transition.get_mle(start_y, next_y, transition_data)
+                transition_weights[i_1, i_2] = transition.get_mle(start_y, next_y, y_freq, transition_data)
         self.transition_weights = transition_weights
     def build_emission_weights(self, emission_data):
         y_vocab = self.pos_tokenizer.vocab_list

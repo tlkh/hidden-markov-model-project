@@ -21,20 +21,27 @@ def read_file_to_lines(path):
         lines = [line.rstrip('\n') for line in open(path, encoding='utf-8')]#, encoding='gb18030', errors='ignore'
     return lines
 
-def add_unk(hashmap, k=3):
-    smoothed_hashmap = {}
-    smoothed_hashmap["##UNK##"] = {}
-    for x in hashmap.keys():
-        count_x = sum(hashmap[x].values())
-        if count_x <= k:
-            for y_of_x in hashmap[x]:
-                if y_of_x in smoothed_hashmap["##UNK##"]:
-                    smoothed_hashmap["##UNK##"][y_of_x] += hashmap[x][y_of_x]
-                else:
-                    smoothed_hashmap["##UNK##"][y_of_x] = hashmap[x][y_of_x]
-        else:
-            smoothed_hashmap[x] = hashmap[x]
-    return smoothed_hashmap
+def add_unk(hashmap, word_freq, k=3):
+    to_delete = []
+    for y in hashmap:
+        if "##UNK##" not in hashmap[y]:
+            hashmap[y]["##UNK##"] = 0
+        for x in hashmap[y]:
+            if word_freq[x] <= k and x is not "##UNK##":
+                hashmap[y]["##UNK##"] += hashmap[y][x]
+                to_delete.append((y, x))
+    for y, x in to_delete:
+        del hashmap[y][x]
+    return hashmap
+
+
+def get_emission_vocab(emission_hashmap):
+    vocab = []
+    for y in emission_hashmap:
+        for x in emission_hashmap[y]:
+            vocab.append(x)
+    vocab = return_vocab(vocab)
+    return vocab
 
 
 def return_vocab(token_list):
