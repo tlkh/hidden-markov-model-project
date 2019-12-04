@@ -27,7 +27,7 @@ def add_unk(hashmap, word_freq, k=3):
         if "##UNK##" not in hashmap[y]:
             hashmap[y]["##UNK##"] = 0
         for x in hashmap[y]:
-            if word_freq[x] <= k and x is not "##UNK##":
+            if word_freq[x] < k and x is not "##UNK##":
                 hashmap[y]["##UNK##"] += hashmap[y][x]
                 to_delete.append((y, x))
     for y, x in to_delete:

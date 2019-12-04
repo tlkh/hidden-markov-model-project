@@ -1,5 +1,6 @@
 import utils
 
+
 def get_mle(y_i1, y_i2, y_freq, transition_data):
     # count( y_i1 -> y_i2 )
     try:
@@ -15,6 +16,7 @@ def get_mle(y_i1, y_i2, y_freq, transition_data):
         mle = count_yi1_yi2 / count_yi1
     return mle
 
+
 def gen_transition_pairs(line):
     _line = ["##START##"] + line + ["##END##"]
     _pairs = [(_line[i], _line[i+1]) for i in range(len(_line)-1)]
@@ -22,23 +24,23 @@ def gen_transition_pairs(line):
 
 
 def generate_transition_pairs(lines, lower=False, replace_number=False):
-    X, Y = [], []
-    current_X, current_Y = [], []
+    Y = []
+    current_Y = []
     y_tokens = ["##START##", "##END##"]
     y_freq = {"##START##": 0,
-              "##END##":0}
+              "##END##": 0}
     for line in lines:
         try:
             x, y = line.split(" ")
             #x = utils.preprocess_text(x, lower, replace_number)
             # x is word, y is POS
-            #current_X.append(x)
+            # current_X.append(x)
             current_Y.append(y)
             try:
                 y_freq[y] += 1
             except KeyError:
                 y_freq[y] = 1
-        except Exception as e:
+        except Exception:
             # empty line: new sentence!
             # create transition pairs
             #pairs_X = gen_transition_pairs(current_X)
@@ -48,22 +50,21 @@ def generate_transition_pairs(lines, lower=False, replace_number=False):
             y_tokens = y_tokens + current_Y
             y_freq["##START##"] += 1
             y_freq["##END##"] += 1
-            current_X, current_Y = [], []
-    return {"X_pairs": X,
-            "Y_pairs": Y,
+            current_Y = []
+    return {"Y_pairs": Y,
             "y_freq": y_freq,
             "y_vocab": utils.return_vocab(y_tokens)}
 
 
 def generate_transition_data(pairs, vocab, verbose=False):
     transition_counts = {}
-    
+
     for token in vocab:
         transition_counts[token] = {}
-        
+
     for pair in pairs:
         transition_counts[pair[0]][pair[1]] = 0
-        
+
     for pair in pairs:
         transition_counts[pair[0]][pair[1]] += 1
 
@@ -74,6 +75,5 @@ def generate_transition_data(pairs, vocab, verbose=False):
             for end_state in transition_counts[start_state].keys():
                 count = transition_counts[start_state][end_state]
                 print("\t", start_state, ">", end_state, count)
-                
-    return transition_counts
 
+    return transition_counts

@@ -1,5 +1,6 @@
 import utils
 
+
 def get_mle(x, y, emission_data):
     if y == "##START##" or y == "##END##":
         return 0
@@ -46,7 +47,7 @@ def generate_emission_table(lines, lower=False, replace_number=False):
                 Y[y] += 1
             else:
                 Y[y] = 1
-        except Exception as e:
+        except Exception:
             if line not in skipped:
                 skipped.append(line)
     print("Skipped", len(skipped), "lines: ", skipped)
