@@ -14,6 +14,7 @@ class Tokenizer(object):
         self.vocab_list = utils.return_vocab(corpus)
         self.vocab_list.sort()
 
+    @lru_cache(12800)
     def return_token(self, input_word):
         try:
             return self.vocab_list.index(input_word)

@@ -21,7 +21,7 @@ def get_mle(x, y, emission_data):
     return mle
 
 
-def generate_emission_table(lines, lower=False, norm_tense=False, replace_number=False, replace_symbol=False):
+def generate_emission_table(lines, lower=False, norm_tense=False, replace_number=False, replace_year=False, replace_symbol=False):
     hashmap = {}
     Y = {}
     skipped = []
@@ -30,7 +30,7 @@ def generate_emission_table(lines, lower=False, norm_tense=False, replace_number
         try:
             x, y = line.split(" ")
             # x is the word, y is the POS
-            x = utils.preprocess_text(x, lower, norm_tense, replace_number, replace_symbol)
+            x = utils.preprocess_text(x, lower, norm_tense, replace_number, replace_year, replace_symbol)
             if x in word_freq:
                 word_freq[x] += 1
             else:
@@ -47,8 +47,9 @@ def generate_emission_table(lines, lower=False, norm_tense=False, replace_number
                 Y[y] += 1
             else:
                 Y[y] = 1
-        except Exception:
+        except Exception as e:
             if line not in skipped:
+                print(e)
                 skipped.append(line)
     print("Skipped", len(skipped), "lines: ", skipped)
     return {"x_hashmap": hashmap,
