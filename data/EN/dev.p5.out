@@ -687,7 +687,7 @@ government I-NP
 source I-NP
 said B-VP
 the B-NP
-26-man I-NP
+NUM-man I-NP
 politburo I-NP
 had B-VP
 asked I-VP
@@ -799,7 +799,7 @@ are B-VP
 calculated I-VP
 on B-PP
 a B-NP
-360-day I-NP
+NUM-day I-NP
 year I-NP
 , O
 while B-SBAR
@@ -810,7 +810,7 @@ is B-VP
 based I-VP
 on B-PP
 a B-NP
-365-day I-NP
+NUM-day I-NP
 year I-NP
 . O
 
@@ -1971,7 +1971,7 @@ the B-NP
 treasury I-NP
 's B-NP
 benchmark I-NP
-30-year I-NP
+NUM-year I-NP
 bond I-NP
 fell B-VP
 more B-NP
@@ -2592,7 +2592,7 @@ destroyed I-NP
 construction B-NP
 of B-PP
 the B-NP
-34-floor I-NP
+NUM-floor I-NP
 building I-NP
 will B-VP
 begin I-VP
@@ -2974,7 +2974,7 @@ $ B-NP
 4 I-NP
 billion I-NP
 of B-PP
-30-year B-NP
+NUM-year B-NP
 bond I-NP
 wednesday I-NP
 . O
@@ -4091,7 +4091,7 @@ half I-NP
 
 the B-NP
 latest I-NP
-10-year I-NP
+NUM-year I-NP
 note I-NP
 are B-VP
 quoted I-VP
@@ -8520,7 +8520,7 @@ folklore I-NP
 . O
 
 one B-NP
-60-second I-NP
+NUM-second I-NP
 tv I-NP
 spot I-NP
 feature B-VP
@@ -9824,7 +9824,7 @@ days I-NP
 the B-NP
 yield I-NP
 on B-PP
-30-year B-NP
+NUM-year B-NP
 treasury I-NP
 bond I-NP
 climbed B-VP
@@ -10426,7 +10426,7 @@ concern I-NP
 , O
 said B-VP
 the B-NP
-15-year I-NP
+NUM-year I-NP
 debenture I-NP
 are B-VP
 convertible B-ADJP
@@ -11677,7 +11677,7 @@ pass I-VP
 
 during B-PP
 the B-NP
-15-month I-NP
+NUM-month I-NP
 survey I-NP
 , O
 43 B-NP
@@ -12200,7 +12200,7 @@ is B-VP
 compared I-VP
 with B-PP
 the B-NP
-300-day I-NP
+NUM-day I-NP
 estimate I-NP
 . O
 
@@ -12937,7 +12937,7 @@ gain I-NP
 
 the B-NP
 benchmark I-NP
-30-year I-NP
+NUM-year I-NP
 bond I-NP
 ended B-VP
 at B-PP
@@ -16734,7 +16734,7 @@ amendment I-NP
 
 the B-NP
 latest I-NP
-10-year I-NP
+NUM-year I-NP
 note I-NP
 are B-VP
 quoted I-VP
@@ -16911,7 +16911,7 @@ declining B-NP
 issue I-NP
 outnumbered B-VP
 advancer B-NP
-505-455 I-NP
+NUM-455 I-NP
 , O
 with B-PP
 172 B-NP
@@ -18488,7 +18488,7 @@ approval I-NP
 -- O
 on B-PP
 a B-NP
-64-35 I-NP
+NUM-35 I-NP
 roll I-NP
 call I-NP
 -- O
@@ -21355,7 +21355,7 @@ at B-PP
 checkpoints B-NP
 in B-PP
 its B-NP
-16-story I-NP
+NUM-story I-NP
 headquarters I-NP
 . O
 
@@ -22151,7 +22151,7 @@ jr I-NP
 
 the B-NP
 average I-NP
-30-day I-NP
+NUM-day I-NP
 simple I-NP
 yield I-NP
 is B-VP
@@ -22168,7 +22168,7 @@ before B-ADVP
 , O
 and O
 the B-NP
-30-day I-NP
+NUM-day I-NP
 compound I-NP
 yield I-NP
 slid B-VP
@@ -24829,7 +24829,7 @@ own I-NP
 membership I-NP
 in B-PP
 the B-NP
-97-nation I-NP
+NUM-nation I-NP
 organization I-NP
 is B-VP
 restored I-VP
@@ -25855,7 +25855,7 @@ actual B-NP
 profit I-NP
 with B-PP
 the B-NP
-30-day I-NP
+NUM-day I-NP
 estimate I-NP
 where B-ADVP
 at B-ADVP
@@ -26592,7 +26592,7 @@ the B-NP
 house I-NP
 on B-PP
 a B-NP
-383-30 I-NP
+NUM-30 I-NP
 roll I-NP
 call B-VP
 yesterday B-NP

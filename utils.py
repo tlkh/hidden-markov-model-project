@@ -16,6 +16,12 @@ def preprocess_text(text_input, lower=False, norm_tense=False, replace_number=Fa
         elif text_input[-1] == "s" and text_input[:-1] in en_to_replace:
             text_input = text_input[:-1]
     if replace_number:
+        try:
+            part_1, part_2 = text_input.split("-")
+            int(part_1)
+            text_input = "NUM-" + part_2
+        except:
+            pass
         if len(text_input) > 3:
             _text_input = text_input.replace(",", "")
         else:
