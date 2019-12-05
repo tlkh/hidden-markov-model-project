@@ -23,7 +23,7 @@ def gen_transition_pairs(line):
     return _pairs
 
 
-def generate_transition_pairs(lines, lower=False, replace_number=False):
+def generate_transition_pairs(lines):
     Y = []
     current_Y = []
     y_tokens = ["##START##", "##END##"]
@@ -31,10 +31,8 @@ def generate_transition_pairs(lines, lower=False, replace_number=False):
               "##END##": 0}
     for line in lines:
         try:
-            x, y = line.split(" ")
-            #x = utils.preprocess_text(x, lower, replace_number)
             # x is word, y is POS
-            # current_X.append(x)
+            x, y = line.split(" ")
             current_Y.append(y)
             try:
                 y_freq[y] += 1

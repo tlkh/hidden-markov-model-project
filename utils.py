@@ -1,16 +1,31 @@
 from functools import lru_cache
 
-def preprocess_text(text_input, lower=False, replace_number=False):
+@lru_cache(12800)
+def preprocess_text(text_input, lower=False, norm_tense=False, replace_number=False, replace_symbol=False):
     text_input = text_input.strip()
-    if lower:
-        text_input = text_input.lower()
+    if lower and text_input.isupper():
+        text_input_lower = text_input.lower()
+        first_char = text_input[0]
+        text_input = first_char + text_input_lower[1:]
+    if norm_tense:
+        if text_input == "was":
+            text_input = "is"
+        elif text_input == "were":
+            text_input = "are"
     if replace_number:
-        text_input = text_input.replace(",", "")
+        if len(text_input) > 3:
+            text_input = text_input.replace(",", "")
         try:
-            float(text_input)
-            text_input = "##NUM##"
+            number = float(text_input)
+            if 1799 < number < 2101:
+                text_input = "##YEAR##"
+            else:
+                text_input = "##NUM##"
         except:
             pass
+    if replace_symbol:
+        if text_input == "&":
+            text_input = "and"
     return text_input
 
 
@@ -48,33 +63,3 @@ def return_vocab(token_list):
     vocab_list = list(set(token_list))
     vocab_list.sort()
     return vocab_list
-
-
-"""
-def convert_to_train_set(lines, lower=True, replace_number=True):
-    X, Y = [], []
-    skipped = []
-    for line in lines:
-        try:
-            x, y = line.split(" ")
-            # x - word
-            if lower:
-                x = x.lower()
-            if replace_number:
-                x = x.replace(",", "")
-                try:
-                    float(x)
-                    x = "#NUM#"
-                except:
-                    pass
-            X.append(x.strip())
-            # y - label
-            Y.append(y.strip())
-        except Exception as e:
-            if line not in skipped:
-                skipped.append(line)
-    print("Skipped", len(skipped), "lines: ", end="")
-    print(skipped)
-    return X, Y
-"""
-

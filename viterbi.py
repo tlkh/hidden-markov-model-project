@@ -31,13 +31,13 @@ class Tokenizer(object):
 
 
 class HMM(object):
-    def __init__(self, transition_weights=None, emission_weights=None):
+    def __init__(self, transition_weights=None, emission_weights=None, eps=1e-8, scale=1000):
         self.transition_weights = transition_weights
         self.emission_weights = emission_weights
         self.word_tokenizer = Tokenizer()
         self.pos_tokenizer = Tokenizer()
-        self.eps = 1e-7
-        self.SCALE = 1000
+        self.eps = eps
+        self.SCALE = scale
 
     def fit_word_tokenizer(self, corpus):
         self.word_tokenizer.fit_on_text(corpus)
@@ -59,7 +59,7 @@ class HMM(object):
     def build_transition_weights(self, y_freq, transition_data):
         y_vocab = self.pos_tokenizer.vocab_list
         len_y_vocab = len(y_vocab)
-        transition_weights = np.zeros((len_y_vocab, len_y_vocab))
+        transition_weights = np.zeros((len_y_vocab, len_y_vocab)) + self.eps
         for i_1 in range(len_y_vocab):
             for i_2 in range(len_y_vocab):
                 start_y, next_y = y_vocab[i_1], y_vocab[i_2]
@@ -72,7 +72,7 @@ class HMM(object):
         len_y_vocab = len(y_vocab)
         x_vocab = self.word_tokenizer.vocab_list
         len_x_vocab = len(x_vocab)
-        emission_weights = np.zeros((len_y_vocab, len_x_vocab))
+        emission_weights = np.zeros((len_y_vocab, len_x_vocab)) + self.eps
         for i_1 in range(len_y_vocab):
             for i_2 in range(len_x_vocab):
                 tag_y, word_x = y_vocab[i_1], x_vocab[i_2]
@@ -89,7 +89,10 @@ class HMM(object):
         return self.pos_tokenizer.vocab_list.index("##END##")
 
     def lm_probs(self, operand_list):
-        results = [math.log(operand + self.eps) for operand in operand_list]
+        try:
+            results = [math.log(operand + self.eps) for operand in operand_list]
+        except Exception as e:
+            print(e, operand_list)
         return math.e ** sum(results)
 
     def _viterbi(self, seq_x_words):
@@ -99,30 +102,26 @@ class HMM(object):
         len_y_vocab = len(y_vocab)
         @lru_cache(maxsize=256)
         def pi(j, v):
-            # state changes: j-1 -> j ; u -> v (last -> current)
-            # indices: 0>START ; 1>WORD ... N>WORD ; N+1>END
             if j == n:
-                pi_list = [self.SCALE * pi(j-1, u) * self.a(v, self.get_stop_token())
-                           for u in range(2, len_y_vocab)]
+                # state changes: j-1 -> j ; u -> v (last -> current)
+                # indices: 0>START ; 1>WORD ... N>WORD ; N+1>END
+                pi_list = [self.SCALE * pi(j-1, u) * self.a(v, self.get_stop_token()) for u in range(2, len_y_vocab)]
                 max_pi = max(pi_list)
             elif j > 1:
                 # pi(j, v) == max(u) : pi(j-1, u) * b(v, word) * a(u, v)
                 word = seq_x[j-1]
-                pi_list = [self.SCALE * pi(j-1, u) * self.b(v, word) * self.a(u, v)
-                           for u in range(2, len_y_vocab)]
+                pi_list = [self.SCALE * pi(j-1, u) * self.b(v, word) * self.a(u, v) for u in range(2, len_y_vocab)]
                 max_pi = max(pi_list)
             elif j == 1:
                 # pi(0, START) == 1 at j = 0
                 # pi(1, v) == 1 * a(START, v) * b(v, word)
                 word = seq_x[j-1]
-                max_pi = self.SCALE * \
-                    self.a(self.get_start_token(), v) * self.b(v, word)
+                max_pi = self.SCALE * self.a(self.get_start_token(), v) * self.b(v, word)
             else:
                 print("!!!!!!")
             return max_pi
-
         def backtrack(j, v):
-            probs = [self.SCALE * pi(j, u) * self.a(u, v)
+            probs = [self.lm_probs([pi(j, u), self.a(u, v)])
                      for u in range(2, len_y_vocab)]
             max_prob_index = probs.index(max(probs))
             return max_prob_index + 2
