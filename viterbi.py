@@ -31,14 +31,14 @@ class Tokenizer(object):
 
 
 class HMM(object):
-    def __init__(self, transition_weights=None, emission_weights=None, eps=1e-8, scale=1000):
+    def __init__(self, transition_weights=None, emission_weights=None, eps=1e-8, scale=1000, reg=0.0):
         self.transition_weights = transition_weights
         self.emission_weights = emission_weights
         self.word_tokenizer = Tokenizer()
         self.pos_tokenizer = Tokenizer()
         self.eps = eps
         self.SCALE = scale
-
+        self.reg = reg 
     def fit_word_tokenizer(self, corpus):
         self.word_tokenizer.fit_on_text(corpus)
 
