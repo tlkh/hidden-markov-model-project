@@ -1,6 +1,7 @@
 from functools import lru_cache
+import subprocess
 
-en_to_replace = [line.rstrip('\n') for line in open('./en_words.txt')]
+en_to_replace = [line.rstrip('\n') for line in open('./en_words_all.txt')]
 sym_map = {
     "--": "-",
     "a.m": "a.m.",
@@ -29,54 +30,94 @@ word_to_num = {
     "ten": "10",
 }
 
+def run_eval(gold_data, pred_data):
+    cmd = "python3 evalResult.py "  + gold_data + " " + pred_data
+    cmd = cmd.split(" ")
+    output = subprocess.check_output(cmd)
+    output = str(output).split("\\n")[1:-1]
+    for o in output:
+        if "Entity  F: " in o:
+            entity_f = float(o.replace("Entity  F: ", ""))
+        elif "Sentiment  F: " in o:
+            sentiment_f = float(o.replace("Sentiment  F: ", ""))
+    return {"entity_f": entity_f,
+            "sentiment_f": sentiment_f,
+            "output": output}
+
 @lru_cache(12800)
-def preprocess_text(text_input, lower=False, norm_tense=False, replace_number=False, replace_year=False, replace_symbol=False):
+def preprocess_text(text_input, mode="en", lower=False, norm_tense=False, replace_number=False, replace_year=False, replace_symbol=False):
     global en_to_replace, sym_map, word_to_num
     text_input = text_input.strip()
-    if lower :
-        text_input = text_input.lower()
-    if replace_number:
-        if text_input in word_to_num:
-            text_input = word_to_num[text_input]
-        try:
-            div = text_input.index("-")
-            part_1 = text_input[:div]
-            if part_1 in word_to_num:
-                part_1 = word_to_num[part_1]
-            float(part_1)
-            text_input = "NUM-THING"
-        except:
-            pass
-        if len(text_input) > 3:
-            _text_input = text_input.replace(",", "")
-        else:
-            _text_input = text_input
-        try:
-            number = float(_text_input)
-            text_input = str(int(number))[0] + "-" + str(len(str(number)))
-        except:
-            pass
-    if norm_tense:
-        if text_input == "was":
-            text_input = "is"
-        elif text_input == "were":
-            text_input = "are"
-        elif text_input[-1] == "s" and text_input[:-1] in en_to_replace:
-            text_input = text_input[:-1]
-        elif text_input[-3:] == "ing" and text_input[:-3] in en_to_replace:
-            text_input = text_input[:-3]
-    if replace_year:
-        year_list = ["1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s",
-                     "'30s", "'40s", "'50s", "'60s", "'70s", "'80s", "'90s"]
-        if text_input in year_list:
-            text_input = "##YEAR##"
-    if replace_symbol:
-        try:
-            text_input = sym_map[text_input]
-        except KeyError:
-            pass
+    if mode == "en":
+        if lower :
+            text_input = text_input.lower()
+        if replace_number:
+            if text_input in word_to_num:
+                text_input = word_to_num[text_input]
+            try:
+                div = text_input.index("-")
+                part_1 = text_input[:div]
+                if part_1 in word_to_num:
+                    part_1 = word_to_num[part_1]
+                float(part_1)
+                text_input = "NUM-THING"
+            except:
+                pass
+            if len(text_input) > 3:
+                _text_input = text_input.replace(",", "")
+            else:
+                _text_input = text_input
+            try:
+                number = float(_text_input)
+                text_input = str(int(number))[0] + "-" + str(len(str(number)))
+            except:
+                pass
+        if norm_tense:
+            if text_input == "was":
+                text_input = "is"
+            elif text_input == "were":
+                text_input = "are"
+            elif text_input[-1] == "s" and text_input[:-1] in en_to_replace:
+                text_input = text_input[:-1]
+            elif text_input[-3:] == "ing" and text_input[:-3] in en_to_replace:
+                text_input = text_input[:-3]
+        if replace_year:
+            year_list = ["1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s",
+                         "'30s", "'40s", "'50s", "'60s", "'70s", "'80s", "'90s"]
+            if text_input in year_list:
+                text_input = "##YEAR##"
+        if replace_symbol:
+            try:
+                text_input = sym_map[text_input]
+            except KeyError:
+                pass
+    elif mode == "al":
+        if lower :
+            text_input = text_input.lower()
+        if replace_number:
+            if text_input in word_to_num:
+                text_input = word_to_num[text_input]
+            try:
+                div = text_input.index("-")
+                part_1 = text_input[:div]
+                if part_1 in word_to_num:
+                    part_1 = word_to_num[part_1]
+                float(part_1)
+                text_input = "NUM-THING"
+            except:
+                pass
+            if len(text_input) > 3:
+                _text_input = text_input.replace(",", "")
+            else:
+                _text_input = text_input
+            try:
+                number = float(_text_input)
+                text_input = str(int(number))[0] + "-" + str(len(str(number)))
+            except:
+                pass
+        return text_input
     return text_input
-
+    
 
 def read_file_to_lines(path):
     if "AL" in path:
@@ -84,6 +125,7 @@ def read_file_to_lines(path):
     else:
         lines = [line.rstrip('\n') for line in open(path, encoding='utf-8')]
     return lines
+
 
 def add_unk(hashmap, word_freq, k=3):
     to_delete = []

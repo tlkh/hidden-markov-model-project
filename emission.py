@@ -49,9 +49,9 @@ def generate_emission_table(lines, lower=False, norm_tense=False, replace_number
                 Y[y] = 1
         except Exception as e:
             if line not in skipped:
-                print(e)
+                #print(e)
                 skipped.append(line)
-    print("Skipped", len(skipped), "lines: ", skipped)
+    #print("Skipped", len(skipped), "lines: ", skipped)
     return {"x_hashmap": hashmap,
             "x_word_freq": word_freq,
             "y_tags": Y}
