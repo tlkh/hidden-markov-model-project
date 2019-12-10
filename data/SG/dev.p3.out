@@ -8987,7 +8987,7 @@ episode O
 . O
 Off O
 to O
-Cornwall O
+Cornwall B-neutral
 soon O
 . O
 mustn't O
@@ -9113,8 +9113,8 @@ story O
 North B-neutral
 Korea I-neutral
 ⒊ O
-#NationalComingOutDay⒋ O
-Australian O
+#NationalComingOutDay⒋ B-positive
+Australian I-positive
 Parliament⒌ O
 #Samsung O
 2016/10 O
@@ -9730,7 +9730,7 @@ government O
 . O
 Now O
 where's O
-Jeremy O
+Jeremy B-positive
 ? O
 
 * O
@@ -11527,12 +11527,12 @@ Attention O
 Doral O
 and O
 Miami B-positive
-area O
+area I-positive
 ‼ O
 ️ O
-Nutritional O
-Power O
-Center O
+Nutritional B-neutral
+Power I-neutral
+Center I-neutral
 … O
 https://t.co/BUfH6LuMvE O
 
@@ -11908,9 +11908,9 @@ to O
 release O
 shortlist O
 of O
-New O
-Central O
-Library O
+New B-neutral
+Central I-neutral
+Library I-neutral
 sites O
 https://t.co/Gp7F3k5Bdn O
 #ottpoli O
@@ -16230,7 +16230,7 @@ the O
 most O
 yards O
 in O
-texas O
+texas B-neutral
 history O
 2nd O
 most O
@@ -18012,14 +18012,14 @@ out O
 of O
 it O
 
-Jesus B-neutral
-Christ I-neutral
-counter I-neutral
-strike I-neutral
-has I-neutral
-gone I-neutral
-down I-neutral
-hill I-neutral
+Jesus B-positive
+Christ I-positive
+counter O
+strike O
+has O
+gone O
+down O
+hill B-neutral
 , I-neutral
 I O
 quit O
@@ -18073,9 +18073,9 @@ orders O
 @poroshenko O
 Gov O
 pay O
-Ukraine O
+Ukraine B-neutral
 lawful O
-PresYanukov O
+PresYanukov B-neutral
 costs O
 . O
 https://t.co/Vodb3i2Ttm O
@@ -24965,7 +24965,7 @@ ARE O
 GOING O
 TO O
 SEE O
-DRAKE O
+DRAKE B-positive
 ! O
 ! O
 ! O
@@ -26548,11 +26548,11 @@ You O
 ( O
 feat O
 . O
-Justin B-neutral
-Bieber I-neutral
-) I-neutral
-by O
-DJ O
+Justin B-positive
+Bieber I-positive
+) I-positive
+by I-positive
+DJ I-positive
 Snake O
 ( O
 at O
@@ -30051,8 +30051,8 @@ colleagues O
 . O
 Is O
 that O
-Tay O
-Tay O
+Tay B-negative
+Tay I-negative
 wearing O
 sunglasses O
 ? O
@@ -34486,7 +34486,7 @@ watching O
 Gossip O
 Girl O
 on O
-Netflix O
+Netflix B-neutral
 . O
 Lol O
 . O
@@ -35278,9 +35278,9 @@ RedPrairie B-neutral
 Manhattan I-neutral
 , O
 Oracle B-neutral
-& I-neutral
-IBM O
-Technology O
+& O
+IBM B-neutral
+Technology I-neutral
 Plz O
 cnt O
 avishek@maxmunus.com O
@@ -36129,12 +36129,12 @@ $ O
 6 O
 billion O
 at O
-State O
-Department O
+State B-neutral
+Department I-neutral
 - O
-The O
-Washington O
-Post O
+The B-neutral
+Washington I-neutral
+Post I-neutral
 https://t.co/c0wy5nsbrH O
 
 Construction O
@@ -36151,9 +36151,9 @@ Blvd I-neutral
 closed O
 . O
 NBC B-negative
-6 I-negative
-South I-negative
-Florida O
+6 O
+South B-neutral
+Florida I-neutral
 traffic O
 @KellyNBC6 O
 https://t.co/80ScdQ1rcN O
@@ -40277,7 +40277,7 @@ AMERICA B-negative
 ! O
 WAKE O
 UP O
-AMERICA O
+AMERICA B-negative
 ! O
 
 i O
@@ -41381,13 +41381,13 @@ bday O
 gift O
 of O
 20 O
-Halloween O
-loot O
-boxes O
+Halloween B-neutral
+loot I-neutral
+boxes I-neutral
 on O
 overwatch O
 , O
-Xbox O
+Xbox B-positive
 one O
 tah O
 xxxx O
@@ -49702,7 +49702,7 @@ periods O
 in O
 his O
 first O
-NHL O
+NHL B-neutral
 game O
 scary O
 good O
@@ -50211,9 +50211,9 @@ Blvd I-neutral
 closed O
 . O
 NBC B-negative
-6 I-negative
-South I-negative
-Florida O
+6 O
+South B-neutral
+Florida I-neutral
 traffic O
 @KellyNBC6 O
 https://t.co/80ScdQ1rcN O

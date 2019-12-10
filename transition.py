@@ -18,7 +18,7 @@ def get_mle(y_i1, y_i2, y_freq, transition_data):
 
 
 def gen_transition_pairs(line):
-    _line = ["##START##"] + line + ["##END##"]
+    _line = ["##START##"] + line + ["##STOP##"]
     _pairs = [(_line[i], _line[i+1]) for i in range(len(_line)-1)]
     return _pairs
 
@@ -26,9 +26,9 @@ def gen_transition_pairs(line):
 def generate_transition_pairs(lines):
     Y = []
     current_Y = []
-    y_tokens = ["##START##", "##END##"]
+    y_tokens = ["##START##", "##STOP##"]
     y_freq = {"##START##": 0,
-              "##END##": 0}
+              "##STOP##": 0}
     for line in lines:
         try:
             # x is word, y is POS
@@ -47,7 +47,7 @@ def generate_transition_pairs(lines):
             Y = Y + pairs_Y
             y_tokens = y_tokens + current_Y
             y_freq["##START##"] += 1
-            y_freq["##END##"] += 1
+            y_freq["##STOP##"] += 1
             current_Y = []
     return {"Y_pairs": Y,
             "y_freq": y_freq,
